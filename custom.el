@@ -8,7 +8,65 @@
  '(org-agenda-files
    '("~/roam/daily/habits.org"))
  '(safe-local-variable-values
-   '((elisp-lint-indent-specs
+   '((eval progn
+      (defun get-go-version nil
+       (shell-command-to-string "go version | cut -d ' ' -f 3 | sed -r 's/go//'"))
+      (dap-register-debug-template "Attach to rogue container"
+       (list :name "Rogue::Attach" :type "go" :request "attach" :mode "remote" :host "127.0.0.1" :port 42097 :substitutePath
+             (vector
+              (ht
+               ("from"
+                (projectile-acquire-root))
+               ("to" "/home/dev/app"))
+              (ht
+               ("from"
+                (concat
+                 (getenv "HOME")
+                 "/.asdf/installs/golang/"
+                 (get-go-version)
+                 "/packages/pkg/mod"))
+               ("to" "/tmp/cache/go/mod/"))
+              (ht
+               ("from"
+                (concat
+                 (getenv "HOME")
+                 "/.asdf/installs/golang/"
+                 (get-go-version)
+                 "/go/src"))
+               ("to"
+                (concat "/home/dev/.asdf/installs/golang/"
+                        (get-go-version)
+                        "/go/src")))))))
+     (eval progn
+      (defun get-go-version nil
+        (shell-command-to-string "go version | cut -d ' ' -f 3 | sed -r 's/go//'"))
+      (dap-register-debug-template "Attach to dev container (Emacs)"
+                                   (list :name "Attach to dev container (Emacs)" :type "go" :request "attach" :mode "remote" :host "127.0.0.1" :port 42097 :substitutePath
+                                         (vector
+                                          (ht
+                                           ("from"
+                                            (projectile-acquire-root))
+                                           ("to" "/home/dev/app"))
+                                          (ht
+                                           ("from"
+                                            (concat
+                                             (getenv "HOME")
+                                             "/.asdf/installs/golang/"
+                                             (get-go-version)
+                                             "/packages/pkg/mod"))
+                                           ("to" "/tmp/cache/go/mod/"))
+                                          (ht
+                                           ("from"
+                                            (concat
+                                             (getenv "HOME")
+                                             "/.asdf/installs/golang/"
+                                             (get-go-version)
+                                             "/go/src"))
+                                           ("to"
+                                            (concat "/home/dev/.asdf/installs/golang/"
+                                                    (get-go-version)
+                                                    "/go/src")))))))
+     (elisp-lint-indent-specs
       (describe . 1)
       (it . 1)
       (thread-first . 0)
