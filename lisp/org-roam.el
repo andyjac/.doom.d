@@ -14,11 +14,11 @@
 ;; and cause horizontal alignment issues when you have multiple TODOs at the same level.
 (setq! org-fancy-priorities-list '("P0" "P1" "P2"))
 
-;; add the `org-habit' module
-(add-to-list 'org-modules 'org-habit)
-
-;; add `habits.org' to `org-agenda-files'
-(add-to-list 'org-agenda-files "~/roam/daily/habits.org")
+(after! org
+  ;; set org-agenda directories
+  (setq org-agenda-files '("~/roam" "~/roam/daily"))
+  ;; enable the `org-habit' module
+  (setq org-modules (add-to-list 'org-modules 'org-habit)))
 
 ;; Setup templates
 (setq! org-roam-capture-templates
