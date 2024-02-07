@@ -84,3 +84,28 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+;; Set frame opacity
+(doom/set-frame-opacity 95)
+
+;; Rust
+(after! rustic
+  (setq rustic-format-on-save t))
+
+(setq-hook! 'web-mode-hook +format-with-lsp nil)
+(setq-hook! 'typescript-mode-hook +format-with-lsp nil)
+
+(after! treesit
+  (setq treesit-language-source-alist
+        '((typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src" nil nil)
+          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src" nil nil))))
+
+(use-package typescript-ts-mode
+  :mode (("\\.ts\\'" . typescript-ts-mode)
+         ("\\.tsx\\'" . tsx-ts-mode))
+  :config
+  (add-hook! '(typescript-ts-mode-hook tsx-ts-mode-hook) #'lsp!))
+
+;; Disable auto-formatting in yaml files since it does dumb things with template variables
+;; present in helm config files
+(setq! +format-on-save-disabled-modes (cons 'yaml-mode +format-on-save-disabled-modes))
